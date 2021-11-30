@@ -10,6 +10,11 @@
  */
 
 /**
+ * @typedef {object} ResponseWithCode
+ * @property {string} message - message
+ */
+
+/**
  * @typedef {object} User
  * @property {string} userName.required - Username
  * @property {string} accessToken.required - Access token for accessing the private routes of API

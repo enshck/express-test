@@ -20,9 +20,9 @@ export default (app: Express) => {
    * @return {Error} 500 - Something went wrong - application/json
    * @example response - 200 - example success response
    * {
-   *   "userName": "example",
-   *   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN",
-   *   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN"
+   *   "userName": "string",
+   *   "accessToken": "string",
+   *   "refreshToken": "string"
    * }
    * @example response - 400 - Required fields are not filled
    * {
@@ -54,9 +54,9 @@ export default (app: Express) => {
    * @return {Error} 500 - Something went wrong - application/json
    * @example response - 200 - example success response
    * {
-   *   "userName": "example",
-   *   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN",
-   *   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN"
+   *   "userName": "string",
+   *   "accessToken": "string",
+   *   "refreshToken": "string"
    * }
    * @example response - 400 - Required fields are not filled
    * {
@@ -77,15 +77,15 @@ export default (app: Express) => {
    * POST /api/user/refreshToken
    * @tags User
    * @param {string} authorization.header.required - expired access token
-   * @param {string} refreshToken.form.required - refreshToken
+   * @param {string} refreshToken.form.required - refreshToken - application/x-www-form-urlencoded
    * @return {RefreshToken} 200 - Tokens has been updated succesfuly - application/json
    * @return {Error} 400 - Required fields are not filled - application/json
    * @return {Error} 401 - Invalid tokens - application/json
    * @return {Error} 500 - Something went wrong - application/json
    * @example response - 200 - example success response
    * {
-   *   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN",
-   *   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN"
+   *   "accessToken": "string",
+   *   "refreshToken": "string"
    * }
    * @example response - 400 - Required fields are not filled
    * {

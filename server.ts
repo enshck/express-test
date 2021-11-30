@@ -10,9 +10,9 @@ const swaggerOptions = {
   info: {
     version: "1.0.0",
     title: "todo-express-test",
-    description: "Todo express test API",
+    description: "Todo API on express.js",
     license: {
-      name: "MIT",
+      name: "enshck",
     },
   },
   swaggerUIPath: variables.defaultUrl + "/api-docs",
