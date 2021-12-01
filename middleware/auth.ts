@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 import { httpCodes } from "../const";
 import variables from "../config/variables";
-import User from "../models/users";
+import { User } from "../models/users";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization;

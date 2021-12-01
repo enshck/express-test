@@ -1,25 +1,20 @@
 import { Request, Response } from "express";
 
 import { httpCodes } from "../const";
-import { List } from "../models/list";
+import { ToDoElement } from "../models/list";
 import { listValidator } from "./validators";
 
 export const getList = async (req: Request, res: Response) => {
   try {
     const { userId } = req.body;
 
-    const list = await List.findOne({
-      userId,
-    }).select(["elements._id", "elements.description", "-_id"]);
+    const toDoElements = await ToDoElement.find({
+      user: userId,
+    }).select(["userId", "description", "_id"]);
 
-    if (!list) {
-      return res.send({
-        userId,
-        elements: [],
-      });
-    }
-
-    return res.send(list);
+    return res.send({
+      data: toDoElements,
+    });
   } catch (err) {
     res.status(httpCodes.internalError).json({
       message: err.message,
@@ -31,35 +26,18 @@ export const createElement = async (req: Request, res: Response) => {
   try {
     const { userId, description } = req.body;
 
-    const listElement = await List.findOne({
-      userId,
-    });
-
     if (!description) {
       res
         .status(httpCodes.badRequest)
         .json({ message: "Description required" });
     }
 
-    if (!listElement) {
-      const newList = new List({
-        userId,
-        elements: [
-          {
-            description,
-          },
-        ],
-      });
+    const newTodoElement = new ToDoElement({
+      user: userId,
+      description,
+    });
 
-      await newList.save();
-
-      return res.status(httpCodes.ok).json({ message: "Created" });
-    }
-
-    listElement.elements.push({ description });
-
-    await listElement.save();
-
+    newTodoElement.save();
     return res.status(httpCodes.created).json({ message: "Created" });
   } catch (err) {
     res.status(httpCodes.internalError).json({ message: err.message });
@@ -69,28 +47,23 @@ export const createElement = async (req: Request, res: Response) => {
 export const updateElement = async (req: Request, res: Response) => {
   try {
     const { value, error } = listValidator.validate(req.body);
-
     if (error) {
-      res.status(httpCodes.badRequest).json({
+      return res.status(httpCodes.badRequest).json({
         message: error.message,
       });
     }
-
-    const { userId, description, elementId } = value;
-
-    const listElement = await List.findOne({
-      userId,
+    const { description, elementId } = value;
+    const listElement = await ToDoElement.findOne({
+      _id: elementId,
     });
 
-    const changedElement = listElement.elements.id(elementId);
-
-    if (!changedElement) {
+    if (!listElement) {
       return res.status(httpCodes.notFound).json({
         message: "Element not found",
       });
     }
 
-    changedElement.description = description;
+    listElement.description = description;
     listElement.save();
 
     res.status(httpCodes.ok).json("Element updated");
@@ -102,30 +75,25 @@ export const updateElement = async (req: Request, res: Response) => {
 export const deleteElement = async (req: Request, res: Response) => {
   try {
     const { elementId } = req.query;
-    const { userId } = req.body;
 
     if (!elementId) {
       return res.status(httpCodes.badRequest).json({
         message: "Element required",
       });
     }
-
-    const listElement = await List.findOne({
-      userId,
+    const listElement = await ToDoElement.findOneAndRemove({
+      _id: elementId,
     });
 
-    const changedElement = listElement.elements.id(elementId);
-
-    if (!changedElement) {
+    if (!listElement) {
       return res.status(httpCodes.notFound).json({
         message: "Element not found",
       });
     }
 
-    changedElement.remove();
-    listElement.save();
-
-    res.status(httpCodes.ok).json("Element deleted");
+    res.status(httpCodes.ok).json({
+      message: "Element deleted",
+    });
   } catch (err) {
     res.status(httpCodes.internalError).json({ message: err.message });
   }

@@ -1,20 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const elementSchema = new Schema(
+interface IToDoElement {
+  user: ObjectId;
+  description: string;
+}
+
+const ToDoElementSchema = new Schema<IToDoElement>(
   {
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     description: { type: String, required: true },
   },
   { timestamps: true, versionKey: false }
 );
 
-const listSchema = new Schema(
-  {
-    userId: { type: String, unique: true, required: true },
-    elements: { type: [elementSchema], required: true },
-  },
-  { timestamps: true, versionKey: false }
+export const ToDoElement = mongoose.model<IToDoElement>(
+  "Todo",
+  ToDoElementSchema
 );
-
-export const List = mongoose.model("list", listSchema);

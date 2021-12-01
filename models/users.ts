@@ -2,7 +2,14 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema(
+interface IUserData {
+  userName: string;
+  password: string;
+  accessToken: string;
+  refreshToken: string;
+}
+
+const UserSchema = new Schema<IUserData>(
   {
     userName: { type: String, unique: true, required: true },
     password: { type: String, required: true },
@@ -12,4 +19,4 @@ const userSchema = new Schema(
   { timestamps: true, versionKey: false }
 );
 
-export default mongoose.model("User", userSchema);
+export const User = mongoose.model<IUserData>("User", UserSchema);

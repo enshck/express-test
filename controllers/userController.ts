@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import User from "../models/users";
+import { User } from "../models/users";
 import {
   userValidator,
   refreshTokenValidator,
@@ -85,11 +85,7 @@ export const login = async (req: Request, res: Response) => {
 
       await user.save();
 
-      return res.send({
-        userName,
-        accessToken,
-        refreshToken,
-      });
+      return res.send(user);
     }
 
     res.status(httpCodes.unAuthorized).json("Invalid Credentials");
